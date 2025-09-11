@@ -18,10 +18,6 @@ public class NorthwindMiscellaneousQueryNpgsqlTest : NorthwindMiscellaneousQuery
         Fixture.TestSqlLoggerFactory.SetTestOutputHelper(testOutputHelper);
     }
 
-    // https://github.com/dotnet/efcore/issues/36311
-    public override Task Entity_equality_contains_with_list_of_null(bool async)
-        => Assert.ThrowsAsync<UnreachableException>(() => base.Entity_equality_contains_with_list_of_null(async));
-
     public override async Task Query_expression_with_to_string_and_contains(bool async)
     {
         await base.Query_expression_with_to_string_and_contains(async);
@@ -249,7 +245,8 @@ WHERE c."CustomerID" IN ('ALFKI', 'ANATR')
         // (see https://github.com/aspnet/EntityFrameworkCore/issues/17598).
         AssertSql(
             """
-@regions={ 'UK', 'SP' } (DbType = Object)
+@regions={ 'UK'
+'SP' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -273,7 +270,9 @@ WHERE c."Region" = ANY (@regions) OR (c."Region" IS NULL AND array_position(@reg
         // (see https://github.com/aspnet/EntityFrameworkCore/issues/17598).
         AssertSql(
             """
-@regions={ 'UK', 'SP', NULL } (DbType = Object)
+@regions={ 'UK'
+'SP'
+NULL } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -323,7 +322,9 @@ WHERE c."Region" = ANY (@regions) OR (c."Region" IS NULL AND array_position(@reg
 
         AssertSql(
             """
-@collection={ 'A%', 'B%', 'C%' } (DbType = Object)
+@collection={ 'A%'
+'B%'
+'C%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -345,7 +346,9 @@ WHERE c."Address" LIKE ANY (@collection)
 
         AssertSql(
             """
-@collection={ 'A%', 'B%', 'C%' } (DbType = Object)
+@collection={ 'A%'
+'B%'
+'C%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -367,7 +370,9 @@ WHERE c."Address" LIKE ALL (@collection)
 
         AssertSql(
             """
-@collection={ 'A%', 'B%', 'C%' } (DbType = Object)
+@collection={ 'A%'
+'B%'
+'C%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -413,7 +418,9 @@ WHERE NOT (c."Address" LIKE ALL (@collection))
 
         AssertSql(
             """
-@collection={ 'a%', 'b%', 'c%' } (DbType = Object)
+@collection={ 'a%'
+'b%'
+'c%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -442,7 +449,9 @@ WHERE c."Address" ILIKE ANY (@collection)
 
         AssertSql(
             """
-@collection={ 'a%', 'b%', 'c%' } (DbType = Object)
+@collection={ 'a%'
+'b%'
+'c%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c
@@ -464,7 +473,9 @@ WHERE NOT (c."Address" ILIKE ANY (@collection))
 
         AssertSql(
             """
-@collection={ 'a%', 'b%', 'c%' } (DbType = Object)
+@collection={ 'a%'
+'b%'
+'c%' } (DbType = Object)
 
 SELECT c."CustomerID", c."Address", c."City", c."CompanyName", c."ContactName", c."ContactTitle", c."Country", c."Fax", c."Phone", c."PostalCode", c."Region"
 FROM "Customers" AS c

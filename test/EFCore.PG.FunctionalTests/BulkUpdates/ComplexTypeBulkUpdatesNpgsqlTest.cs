@@ -109,7 +109,8 @@ SET "ShippingAddress_ZipCode" = c."BillingAddress_ZipCode",
             """
 @complex_type_p_AddressLine1='New AddressLine1'
 @complex_type_p_AddressLine2='New AddressLine2'
-@complex_type_p_Tags={ 'new_tag1', 'new_tag2' } (DbType = Object)
+@complex_type_p_Tags={ 'new_tag1'
+'new_tag2' } (DbType = Object)
 @complex_type_p_ZipCode='99999' (Nullable = true)
 @complex_type_p_Code='FR'
 @complex_type_p_FullName='France'
@@ -163,7 +164,8 @@ SET "ShippingAddress_AddressLine1" = c."BillingAddress_AddressLine1",
             """
 @complex_type_p_AddressLine1='New AddressLine1'
 @complex_type_p_AddressLine2='New AddressLine2'
-@complex_type_p_Tags={ 'new_tag1', 'new_tag2' } (DbType = Object)
+@complex_type_p_Tags={ 'new_tag1'
+'new_tag2' } (DbType = Object)
 @complex_type_p_ZipCode='99999' (Nullable = true)
 @complex_type_p_Code='FR'
 @complex_type_p_FullName='France'
@@ -225,10 +227,59 @@ WHERE c0."Id" = c1."Id"
 
         AssertExecuteUpdateSql(
             """
-@p={ 'new_tag1', 'new_tag2' } (DbType = Object)
+@p={ 'new_tag1'
+'new_tag2' } (DbType = Object)
 
 UPDATE "Customer" AS c
 SET "ShippingAddress_Tags" = @p
+""");
+    }
+
+    public override async Task Update_complex_type_to_null(bool async)
+    {
+        await base.Update_complex_type_to_null(async);
+
+        AssertExecuteUpdateSql(
+            """
+UPDATE "Customer" AS c
+SET "OptionalAddress_AddressLine1" = NULL,
+    "OptionalAddress_AddressLine2" = NULL,
+    "OptionalAddress_Tags" = NULL,
+    "OptionalAddress_ZipCode" = NULL,
+    "OptionalAddress_Country_Code" = NULL,
+    "OptionalAddress_Country_FullName" = NULL
+""");
+    }
+
+    public override async Task Update_complex_type_to_null_lambda(bool async)
+    {
+        await base.Update_complex_type_to_null_lambda(async);
+
+        AssertExecuteUpdateSql(
+            """
+UPDATE "Customer" AS c
+SET "OptionalAddress_AddressLine1" = NULL,
+    "OptionalAddress_AddressLine2" = NULL,
+    "OptionalAddress_Tags" = NULL,
+    "OptionalAddress_ZipCode" = NULL,
+    "OptionalAddress_Country_Code" = NULL,
+    "OptionalAddress_Country_FullName" = NULL
+""");
+    }
+
+    public override async Task Update_complex_type_to_null_parameter(bool async)
+    {
+        await base.Update_complex_type_to_null_parameter(async);
+
+        AssertExecuteUpdateSql(
+            """
+UPDATE "Customer" AS c
+SET "OptionalAddress_AddressLine1" = NULL,
+    "OptionalAddress_AddressLine2" = NULL,
+    "OptionalAddress_Tags" = NULL,
+    "OptionalAddress_ZipCode" = NULL,
+    "OptionalAddress_Country_Code" = NULL,
+    "OptionalAddress_Country_FullName" = NULL
 """);
     }
 
